@@ -1,7 +1,24 @@
 import * as fs from 'fs'
-import { chain, difference, flow } from 'lodash'
+import { chain, difference, flow, uniq } from 'lodash'
 
-export function dashify(string: string): string {
+const RULE_DIRECTORIES: ReadonlyArray<string> = [
+  'node_modules/tslint/lib/rules',
+  'node_modules/tslint-immutable/rules',
+  'node_modules/tslint-react/rules',
+]
+
+interface TSLintJSON {
+  readonly extends?: string | string[],
+  readonly rulesDirectory?: string | string[],
+  readonly rules: { readonly [ruleName: string]: {} }
+}
+
+function arrayize<T>(value: T | T[]): T[] {
+  if (Array.isArray(value)) return value
+  return [value]
+}
+
+function dashify(string: string): string {
     return string.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`)
 }
 
@@ -11,6 +28,11 @@ function getRules(dir: string): string[] {
   return fs.readdirSync(dir)
   .filter(file => /Rule.js$/.test(file))
   .map(file => file.substr(0, file.length - 'Rule.ts'.length))
+}
+
+function getRuleDirectories({ rulesDirectory }: TSLintJSON): ReadonlyArray<string> {
+  if (rulesDirectory !== undefined) return uniq(RULE_DIRECTORIES.concat(arrayize(rulesDirectory)))
+  return RULE_DIRECTORIES
 }
 
 function stripComments(content: string): string {
@@ -47,19 +69,16 @@ if (!fs.existsSync('node_modules')) {
   process.exit(-1)
 }
 
-const myRules = flow(
+const tslintJSON: TSLintJSON = flow(
   (fileName: string) => fs.readFileSync(fileName).toString().replace(/^\uFEFF/, ''),
   stripComments,
   // tslint:disable-next-line:no-unbound-method
   JSON.parse,
-  json => Object.keys(json.rules),
 )('tslint.json')
 
-const allRules = chain([
-  'node_modules/tslint/lib/rules/',
-  'node_modules/tslint-immutable/a/rules/',
-  'node_modules/tslint-react/rules/',
-])
+const myRules = Object.keys(tslintJSON.rules)
+
+const allRules = chain(getRuleDirectories(tslintJSON))
 .map(getRules)
 .flatten()
 .map(dashify)
