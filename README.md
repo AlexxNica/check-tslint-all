@@ -11,6 +11,7 @@ Currently checks rules for:
 * tslint
 * tslint-immutable
 * tslint-react
+* and whatever is in rulesDirectory
 
 **Example**
 
