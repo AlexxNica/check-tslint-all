@@ -1,0 +1,35 @@
+{
+  "name": "check-tslint-all",
+  "description": "Lists out all unspecified rules in your tslint.json",
+  "version": "0.0.0",
+  "bin": {
+    "check-tslint-all": "./bin/check-tslint-all.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/khoomeister/check-tslint-all.git"
+  },
+  "author": "Chris Khoo <chris.khoo@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "clean": "find lib -name '*.js' -type f -delete",
+    "lint": "tslint --type-check --project tsconfig.json --format stylish",
+    "start": "node lib/index.js",
+    "test": "npm run clean && npm run build && npm run lint",
+    "watch": "npm-run-all -pr watch:*",
+    "watch:tsc": "tsc --watch"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.61",
+    "@types/node": "^7.0.12",
+    "npm-run-all": "^4.0.2",
+    "tslint": "^5.0.0",
+    "tslint-immutable": "^2.1.0",
+    "tslint-react": "^2.5.0",
+    "typescript": "^2.0.3"
+  },
+  "dependencies": {
+    "lodash": "^4.17.4"
+  }
+}
