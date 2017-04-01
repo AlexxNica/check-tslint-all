@@ -13,6 +13,7 @@ Example output:
 
 ```sh
 $ check-tslint-all
+
 Unspecified rules in tslint.json
 ================================
 align
