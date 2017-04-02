@@ -2,6 +2,7 @@ import * as fs from 'fs'
 import { flow } from 'lodash'
 import { extname } from 'path'
 
+const ARG1 = 2
 const BUILT_IN_CONFIG = /^tslint:(.*)$/
 
 export interface TSLintConfig {
@@ -38,6 +39,11 @@ export function getExtendRules(extend: string): ReadonlyArray<string> {
     config => config.rules,
     Object.keys,
   )()
+}
+
+export function log(output: string): void {
+  if (process.argv[ARG1] === '--silent') return
+  console.log(output)
 }
 
 export function readConfigFile(file: string): TSLintConfig {

@@ -244,7 +244,16 @@
     ],
 
     // tslint-immutable
+    "import-containment": false,
+    "no-arguments": true,
+    "no-class": false,
+    "no-expression-statement": false,
+    "no-label": true,
     "no-let": true,
+    "no-mixed-interface": false,
+    "no-new": false,
+    "no-semicolon-interface": false,
+    "no-this": false,
     "readonly-array": true,
     "readonly-indexer": true,
     "readonly-interface": true,

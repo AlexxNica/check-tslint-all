@@ -5,26 +5,30 @@ import {
   dashify,
   getDirRules,
   getExtendRules,
+  log,
   readConfigFile,
   TSLintConfig,
 } from './helpers'
 
+const UNSPECIFIED_RULES_ERROR = 1
+const MISSING_FILES_ERROR = 2
+const TSLINT_RULE_DIRECTORY = 'node_modules/tslint/lib/rules'
+
 if (!fs.existsSync('tslint.json')) {
-  console.error('Missing tslint.json')
-  process.exit(-1)
+  log('Missing tslint.json')
+  process.exit(MISSING_FILES_ERROR)
 }
 if (!fs.existsSync('node_modules')) {
-  console.error(`Missing node_modules`)
-  process.exit(-1)
+  log(`Missing node_modules`)
+  process.exit(MISSING_FILES_ERROR)
 }
-
-const TSLINT_RULE_DIRECTORY = 'node_modules/tslint/lib/rules'
 
 const mainConfig: TSLintConfig = readConfigFile('tslint.json')
 
 const myRules = Object.keys(mainConfig.rules)
 
-const dirRules = chain(arrayize(mainConfig.rulesDirectory).concat(TSLINT_RULE_DIRECTORY))
+const dirRules = chain(arrayize(mainConfig.rulesDirectory))
+.concat(TSLINT_RULE_DIRECTORY)
 .map(getDirRules)
 .flatten()
 .map(dashify)
@@ -35,8 +39,15 @@ const extendRules = chain(arrayize(mainConfig.extends))
 .flatten()
 .value()
 
-const allRules = chain(dirRules).concat(extendRules).uniq().value()
+const allRules = chain(dirRules).concat(extendRules).uniq().sort().value()
 
-console.log('Unspecified rules in tslint.json')
-console.log('================================')
-difference(allRules, myRules).forEach(item => console.log(item))
+const diffed = difference(allRules, myRules)
+if (diffed.length === 0) {
+  log('All rules are specified in tslint.json.')
+  process.exit(0)
+} else {
+  log('Unspecified rules in tslint.json')
+  log('================================')
+  diffed.forEach(log)
+  process.exit(UNSPECIFIED_RULES_ERROR)
+}
