@@ -1,8 +1,13 @@
 #!/bin/bash
 
 if [ -z "$1" ] || ! [[ "$1" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-  echo "You need to supply a semver (syntax: $0 1.2.3)"
+  echo "You need to supply a semver (syntax: $0 1.2.3)."
   exit 1
+fi
+
+if [[ "$(json -f package.json version)" == "$1" ]]; then
+  echo "The supplied version number cannot be the same as the one in package.json."
+  exit 2
 fi
 
 set -e

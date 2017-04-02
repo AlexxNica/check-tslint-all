@@ -23,9 +23,10 @@
   "devDependencies": {
     "@types/lodash": "^4.14.61",
     "@types/node": "^7.0.12",
+    "json": "^9.0.6",
     "npm-run-all": "^4.0.2",
     "tslint": "^5.0.0",
-    "tslint-immutable": "^2.1.0",
+    "tslint-immutable": "^3.0.0",
     "tslint-react": "^2.5.0",
     "typescript": "^2.0.3"
   },
