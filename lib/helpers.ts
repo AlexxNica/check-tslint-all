@@ -66,7 +66,9 @@ function stripComments(content: string): string {
       } else if (m4 !== undefined) {
           // A line comment. If it ends in \r?\n then keep it.
           const length = m4.length
+          // tslint:disable-next-line:no-magic-numbers
           if (length > 2 && m4[length - 1] === '\n') {
+              // tslint:disable-next-line:no-magic-numbers
               return m4[length - 2] === '\r' ? '\r\n' : '\n'
           } else {
               return ''
