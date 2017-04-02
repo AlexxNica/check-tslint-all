@@ -1,7 +1,7 @@
 {
   "name": "check-tslint-all",
   "description": "Lists out all unspecified rules in your tslint.json",
-  "version": "1.0.5",
+  "version": "2.0.0",
   "bin": {
     "check-tslint-all": "./bin/check-tslint-all.js"
   },
