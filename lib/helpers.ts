@@ -1,6 +1,7 @@
 import * as fs from 'fs'
 import { flow } from 'lodash'
 import { extname } from 'path'
+import * as resolve from 'resolve'
 
 const ARG1 = 2
 const BUILT_IN_CONFIG = /^tslint:(.*)$/
@@ -34,7 +35,7 @@ export function getExtendRules(extend: string): ReadonlyArray<string> {
   if (matches != null && matches.length > 0) return []
 
   return flow(
-    () => require.resolve(extend),
+    () => resolve.sync(extend, { basedir: process.cwd() }),
     readConfigFile,
     config => config.rules,
     Object.keys,
