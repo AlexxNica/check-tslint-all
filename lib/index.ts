@@ -1,5 +1,6 @@
 import * as fs from 'fs'
 import { chain, difference } from 'lodash'
+import * as path from 'path'
 import {
   arrayize,
   dashify,
@@ -10,10 +11,16 @@ import {
   TSLintConfig,
 } from './helpers'
 
+const ARG1 = 2
 const UNSPECIFIED_RULES_ERROR = 1
 const MISSING_FILES_ERROR = 2
 const TSLINT_RULE_DIRECTORY = 'node_modules/tslint/lib/rules'
 
+if (process.argv[ARG1] === '--version') {
+  const packageJSONFileName = path.resolve(__dirname, '../package.json')
+  console.log(JSON.parse(fs.readFileSync(packageJSONFileName).toString())['version'])
+  process.exit(0)
+}
 if (!fs.existsSync('tslint.json')) {
   log('Missing tslint.json')
   process.exit(MISSING_FILES_ERROR)
