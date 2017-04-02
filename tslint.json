@@ -64,9 +64,9 @@
     "no-mergeable-namespace": true,
     "no-namespace": true,
     "no-non-null-assertion": true,
-    "no-null-keyword": true,
+    "no-null-keyword": false,
     "no-parameter-properties": false,
-    "no-unbound-method": true,
+    "no-unbound-method": false, // e.g. problematic with composing JSON.parse, Object.keys, etc.
     "no-reference": true,
     "no-reference-import": true,
     "no-require-imports": true,
@@ -130,7 +130,7 @@
       }
     ],
     "strict-boolean-expressions": true,
-    "strict-type-predicates": true,
+    "strict-type-predicates": false,
     "switch-default": true,
     "trailing-comma": [
       true,
